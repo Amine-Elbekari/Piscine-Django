@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{title}</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        h1 { color: #2c3e50; }
+        .info { border: 1px solid #ccc; display: inline-block; padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>{name} {surname}</h1>
+        <h1>{surname}</h1>
+        <h3>{profession}</h3>
+        <p>Age: {age} years old</p>
+        <hr>
+        <p>Junior with mind of Senior!</p>
+    </div>
+</body>
+</html>

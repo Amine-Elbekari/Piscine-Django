@@ -1,0 +1,6 @@
+Job_title="FullStack Developer"
+name="El bekari"
+surname="Amine"
+age="27"
+profession = "Junior Developer"
+title = "My Resume"
