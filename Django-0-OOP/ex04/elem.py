@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 
 class Text(str):
     """
@@ -27,7 +25,10 @@ class Elem:
 
         Obviously.
         """
-        [...]
+        self.tag = tag
+        self.attr = attr
+        self.content = content
+        self.tag_type = tag_type
 
     def __str__(self):
         """
@@ -36,10 +37,28 @@ class Elem:
         Make sure it renders everything (tag, attributes, embedded
         elements...).
         """
+        result = ""
+
         if self.tag_type == 'double':
-            [...]
+            
+            if self.attr and self.content:
+                unpack_attr = '; '.join(f"{k}={v}" for k, v in self.attr.items())
+                result = self.tag + ' ' + unpack_attr + self.content
+            if self.attr and not self.content:
+                unpack_attr = '; '.join(f"{k}={v}" for k, v in self.attr.items())
+                result = self.tag + ' ' + unpack_attr
+            if not self.attr and self.content:
+                result = self.tag + self.content
+            if not self.attr and not self.content:
+                result = self.tag
+
         elif self.tag_type == 'simple':
-            [...]
+            
+            if self.attr:
+                unpack_attr = '; '.join(f"{k}={v}" for k, v in self.attr.items())
+                result = self.tag + ' ' + unpack_attr
+            if not self.attr:
+                result = self.tag
         return result
 
     def __make_attr(self):
@@ -60,7 +79,8 @@ class Elem:
             return ''
         result = '\n'
         for elem in self.content:
-            result += [...]
+            # result += [...]
+            print(elemt)
         return result
 
     def add_content(self, content):
@@ -84,4 +104,4 @@ class Elem:
 
 
 if __name__ == '__main__':
-    [...]
+    print()   
