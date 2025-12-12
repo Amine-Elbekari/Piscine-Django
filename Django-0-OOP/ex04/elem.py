@@ -38,7 +38,10 @@ class Elem:
         """
         self.tag = tag
         self.attr = attr
-        self.content = [] if self.content is None else self.content
+        if content is not None and not isinstance(content, list):
+            self.content = [content]
+        else:
+            self.content = [] if content is None else content
         self.tag_type = tag_type
 
     def __str__(self):
@@ -49,21 +52,12 @@ class Elem:
         elements...).
         """
         result = ""
-        # is_not_empty = False
-    
-        if self.tag_type == 'double':
-            
-            if self.content
-            process_content = self.__make_content()
-            # test = self.add_content(process_content)
-            # print(process_content)
-            # print('SSEEEEELF TAAAG: ', self.tag)
-            result = process_content
-            print('REEEESULT ', result)
 
-        elif self.tag_type == 'simple':
-            result = ''
-           
+        if self.tag_type == 'double':
+            result += f"<{self.tag}>"
+            result += self.__make_content()
+            result += f"</{self.tag}>"
+            print(result)
         return result
 
     def __make_attr(self):
@@ -75,15 +69,17 @@ class Elem:
             result += ' ' + str(pair[0]) + '="' + str(pair[1]) + '"'
         return result
 
+
     def __make_content(self):
         """
         Here is a method to render the content, including embedded elements.
         """
+        result = ''
+        flag = False
         if len(self.content) == 0:
             return ''
-        result = '\n'
         for elem in self.content:
-
+            result += str(elem) + '\n'
         return result
 
     def add_content(self, content):
