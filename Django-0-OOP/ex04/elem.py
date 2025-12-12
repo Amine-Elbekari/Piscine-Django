@@ -10,7 +10,18 @@ class Text(str):
         """
         Do you really need a comment to understand this method?..
         """
-        return super().__str__().replace('\n', '\n<br />\n')
+        to_replace = super().__str__()
+        
+        to_replace = (
+            to_replace
+            .replace('<', '&lt;')
+            .replace('>', '&gt;')
+            .replace('"', '&quot;')
+            .replace('\n', '\n<br />\n')
+        )
+
+        return to_replace
+
 
 
 class Elem:
@@ -27,7 +38,7 @@ class Elem:
         """
         self.tag = tag
         self.attr = attr
-        self.content = content
+        self.content = [] if self.content is None else self.content
         self.tag_type = tag_type
 
     def __str__(self):
@@ -38,27 +49,21 @@ class Elem:
         elements...).
         """
         result = ""
-
+        # is_not_empty = False
+    
         if self.tag_type == 'double':
             
-            if self.attr and self.content:
-                unpack_attr = '; '.join(f"{k}={v}" for k, v in self.attr.items())
-                result = self.tag + ' ' + unpack_attr + self.content
-            if self.attr and not self.content:
-                unpack_attr = '; '.join(f"{k}={v}" for k, v in self.attr.items())
-                result = self.tag + ' ' + unpack_attr
-            if not self.attr and self.content:
-                result = self.tag + self.content
-            if not self.attr and not self.content:
-                result = self.tag
+            if self.content
+            process_content = self.__make_content()
+            # test = self.add_content(process_content)
+            # print(process_content)
+            # print('SSEEEEELF TAAAG: ', self.tag)
+            result = process_content
+            print('REEEESULT ', result)
 
         elif self.tag_type == 'simple':
-            
-            if self.attr:
-                unpack_attr = '; '.join(f"{k}={v}" for k, v in self.attr.items())
-                result = self.tag + ' ' + unpack_attr
-            if not self.attr:
-                result = self.tag
+            result = ''
+           
         return result
 
     def __make_attr(self):
@@ -74,13 +79,11 @@ class Elem:
         """
         Here is a method to render the content, including embedded elements.
         """
-
         if len(self.content) == 0:
             return ''
         result = '\n'
         for elem in self.content:
-            # result += [...]
-            print(elemt)
+
         return result
 
     def add_content(self, content):
@@ -101,7 +104,3 @@ class Elem:
                 (type(content) == list and all([type(elem) == Text or
                                                 isinstance(elem, Elem)
                                                 for elem in content])))
-
-
-if __name__ == '__main__':
-    print()   
