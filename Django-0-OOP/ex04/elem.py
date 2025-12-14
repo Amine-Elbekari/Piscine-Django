@@ -23,12 +23,13 @@ class Text(str):
         return to_replace
 
 
-
 class Elem:
     """
     Elem will permit us to represent our HTML elements.
     """
-    
+    class ValidationError(Exception):
+        def __init__(self):
+            super().__init__('Error: Incorrect Content Type!')
 
     def __init__(self, tag='div', attr={}, content=None, tag_type='double'):
         """
@@ -38,11 +39,10 @@ class Elem:
         """
         self.tag = tag
         self.attr = attr
-        if content is not None and not isinstance(content, list):
-            self.content = [content]
-        else:
-            self.content = [] if content is None else content
         self.tag_type = tag_type
+        self.content = []
+        if content is not None:
+            self.add_content(content)
 
     def __str__(self):
         """
@@ -52,12 +52,12 @@ class Elem:
         elements...).
         """
         result = ""
-
         if self.tag_type == 'double':
-            result += f"<{self.tag}>"
+            result += f"<{self.tag}{self.__make_attr()}>" 
             result += self.__make_content()
             result += f"</{self.tag}>"
-            print(result)
+        elif self.tag_type == 'simple':
+            result += f"<{self.tag}{self.__make_attr()} />"
         return result
 
     def __make_attr(self):
@@ -69,17 +69,15 @@ class Elem:
             result += ' ' + str(pair[0]) + '="' + str(pair[1]) + '"'
         return result
 
-
     def __make_content(self):
         """
         Here is a method to render the content, including embedded elements.
         """
-        result = ''
-        flag = False
         if len(self.content) == 0:
             return ''
+        result = '\n'
         for elem in self.content:
-            result += str(elem) + '\n'
+            result += "  " + str(elem).replace('\n', '\n  ') + '\n'
         return result
 
     def add_content(self, content):
@@ -100,3 +98,11 @@ class Elem:
                 (type(content) == list and all([type(elem) == Text or
                                                 isinstance(elem, Elem)
                                                 for elem in content])))
+
+if __name__ == '__main__':
+
+    generate_html = Elem(tag='html',content=[Elem(tag='head', content=Elem(tag='title', content=Text("Hello ground!"))), Elem(tag='body', content=[Elem(tag='h1', content=Text("Oh no, not again!")), Elem(tag='img', attr={'src': "http://i.imgur.com/pfp3T.jpg"}, tag_type='simple')])])
+    print(generate_html)
+
+
+ 
