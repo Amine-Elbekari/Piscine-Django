@@ -7,158 +7,70 @@ class Page:
         self.class_instance = class_instance
     def is_valid(self):
         
+        # The if else is not a good solution so i am gonna use dict of tuples
         node = self.class_instance
         valid = False
-        valid_classes = (Html, Head, Body, Title, Meta, Img, Table, Th, Tr, Td, Ul, Ol, Li, H1, H2, P, Div, Span, Hr, Br, Text)
-        body_div_valid_elements = (Div, H1, H2, Table, Ul, Ol, Span, Text)
-        if not isinstance(node, valid_classes):
+        allowed_elements = {
+            Html: (Head, Body),
+            Head: (Title, Meta),
+            Body: (H1, H2, Div, Table, Ul, Ol, Span, Text, Br, Hr, Img),
+            Div: (H1, H2, Div, Table, Ul, Ol, Span, Text, Br, Hr, Img),
+            Table: (Tr,),
+            Tr: (Th, Td),
+            Th: (Text,),
+            Td: (Text,),
+            Ul: (Li,),
+            Ol: (Li,),
+            Li: (Text,),
+            H1: (Text,),
+            H2: (Text,),
+            Title: (Text,),
+            Span: (Text, P),
+            P: (Text,)
+        }
+        if not isinstance(node, Html) or len(node.content) != 2:
             return False
-        if not isinstance(node, Html):
+        if not isinstance(node.content[0], Head) or\
+            not isinstance(node.content[1], Body):
             return False
-        if len(node.content) == 2:
-            if not isinstance(node.content[0], Head) or \
-                not isinstance(node.content[1], Body):
-                 return False
-            # Head Check
-            if len(node.content[0].content) == 1:
+        if len(node.content[0].content) == 1:
+            if isinstance(node.content[0].content[0], Title):
                 valid = True
-                if isinstance(node.content[0].content[0], Title):
-                    if node.content[0].content[0].content and len(node.content[0].content[0].content) == 1:
-                        
-                        if not isinstance(node.content[0].content[0].content[0], Text):
-                            return False
-                    else:
-                        return False
-                else:
-                    return False
-            elif len(node.content[0].content) == 2:
-                print(f"THIS IS HEAD CONTENT: {node.content[0].content[1]}")
+        elif len(node.content[0].content) == 2:
+            if isinstance(node.content[0], Title) and isinstance(node.content[1], Meta):
                 valid = True
-                if not isinstance(node.content[0].content[0], Title) or \
-                    not isinstance(node.content[0].content[1], Meta):
+        if not valid:
+            return False
+        
+        body = node.content[1]
+        nodes_to_check = [body]
+        while len(nodes_to_check) > 0:
+            
+            current_node = nodes_to_check.pop(0)
+            if isinstance(current_node, (Text, Br, Hr, Meta, Img)):
+                continue
+            current_type = type(current_node)
+            if current_type not in allowed_elements:
+                return False
+            allowed_children_type = allowed_elements[current_type]
+
+            current_children = current_node.content
+            if current_children:
+                for child in current_children:
+                    if not isinstance(child, allowed_children_type):
+                        print('ds')
                         return False
-                if node.content[0].content[0].content and len(node.content[0].content[0].content) == 1:
-                    if not isinstance(node.content[0].content[0].content[0], Text):
-                        return False
-                else:
-                    return False
-                if not node.content[0].content[1].attr:
-                    return False
+                    nodes_to_check.append(child)
             else:
                 return False
-            # Body Check
-            if len(node.content[1].content) > 0:
-                valid = True
-                for elm in node.content[1].content:
-                    if isinstance(elm, body_div_valid_elements):
-                        if isinstance(elm, Div):
-                            if elm.content:
-                                for elm_div in elm.content:
-                                    if isinstance(elm_div, body_div_valid_elements):
-                                        if isinstance(elm_div, H1):
-                                            if elm_div:
-                                                if len(elm_div.content) != 1:
-                                                    return False
-                                            else:
-                                                return False
-                                        if isinstance(elm_div, H2):
-                                            if elm_div:
-                                                if len(elm_div.content) != 1:
-                                                    return False
-                                            else:
-                                                return False
-                                        if isinstance(elm_div, Ul):
-                                            if elm_div:
-                                                if len(elm_div.content) != 1:
-                                                    return False
-                                            else:
-                                                return False
-                                        if isinstance(elm_div, Ol):
-                                            if elm_div:
-                                                if len(elm_div.content) >= 1:
-                                                    print(len(elm_div.content))
-                                            else:
-                                                return False
-                                        if isinstance(elm_div, Span):
-                                            if elm_div:
-                                                if len(elm_div.content) == 1:
-                                                    if not isinstance(elm_div.content[0], Text) and \
-                                                        not isinstance(elm_div.content[0], P):
-                                                        return False
-                                                    if isinstance(elm_div.content[0], P):
-                                                        if elm_div.content[0].content:
-                                                            if len(elm.content[0].content) == 1:
-                                                                if not isinstance(elm.content[0].content[0], Text):
-                                                                    return False
-                                                            else:
-                                                                return False   
-                                                        else:
-                                                            return False
-                                                else:
-                                                    return False    
-                                            else:
-                                                return False
-                                        continue
-                                    else:
-                                        return False
-                            else:
-                                return False
-                        if isinstance(elm, H1):
-                            if elm:
-                                if len(elm.content) != 1:
-                                        return False
-                            else:
-                                    return False
-                        if isinstance(elm, H2):
-                            if elm:
-                                if len(elm.content) != 1:
-                                    return False
-                            else:
-                                return False
-                        if isinstance(elm, Ul):
-                            if elm:
-                                if len(elm.content) != 1:
-                                    return False
-                            else:
-                                return False
-                        if isinstance(elm, Ol):
-                            if elm:
-                                if len(elm.content) != 1:
-                                    return False
-                            else:
-                                return False
-                        if isinstance(elm, Span):
-                            if elm:
-                                if len(elm.content) == 1:
-                                    if not isinstance(elm.content[0], Text) and \
-                                        not isinstance(elm.content[0], P):
-                                        return False
-                                    if isinstance(elm.content[0], P):
-                                        if elm.content[0].content:
-                                            if len(elm.content[0].content) == 1:
-                                                if not isinstance(elm.content[0].content[0], Text):
-                                                    return False
-                                            else:
-                                                return False
-                                        else:
-                                            return False
-                                else:
-                                    return False
-                            else:
-                                return False
-                        continue
-                    else:
-                        return False
-            else:
-                return False
-        else:
-            return False
         return valid
+        
 if __name__ == "__main__":
     # H1, H2, Div, Table, Ul, Ol, Span, or Text
     try:
-        t = Html([Head([Title(Text('f'))]), Body([Div([H1(Text('Y')), H2(Text('Y')), Ul(Text('Y')), Ol(Text('Y'))]), H1(Text('Y')), H2(Text('Y')), Table(),Ul(Text('Y')), Ol(Text('Y')), Span(P(Text('TEXT'))), Text('I AM INSIDE BODY')])])
+        t = Html([Head([Title(Text('f'))]), Body([Div([H1(Text('Y')), H2(Text('Y')), Ul([Li(Text('ds')), Li(Text('fdfd'))]), Ol(Li(Text('sd')))]), H1(Text('Y')), Br(),H2(Text('Y')), Table(Tr(Td(Text("sdsd")))),Ul(Li(Text('asdsd'))), Ol(Li(Text('xxx'))), Span(P(Text('TEXT'))), Text('I AM INSIDE BODY')])])
         a = Page(t)
+        # print(f'{t}')
         print(a.is_valid())
     except Exception as e:
         print(e)
