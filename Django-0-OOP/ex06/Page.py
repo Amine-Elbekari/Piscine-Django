@@ -45,7 +45,6 @@ class Page:
         body = node.content[1]
         nodes_to_check = [body]
         while len(nodes_to_check) > 0:
-            
             current_node = nodes_to_check.pop(0)
             if isinstance(current_node, (Text, Br, Hr, Meta, Img)):
                 continue
@@ -53,12 +52,11 @@ class Page:
             if current_type not in allowed_elements:
                 return False
             allowed_children_type = allowed_elements[current_type]
-
+            
             current_children = current_node.content
             if current_children:
                 for child in current_children:
                     if not isinstance(child, allowed_children_type):
-                        print('ds')
                         return False
                     nodes_to_check.append(child)
             else:
@@ -68,7 +66,9 @@ class Page:
 if __name__ == "__main__":
     # H1, H2, Div, Table, Ul, Ol, Span, or Text
     try:
-        t = Html([Head([Title(Text('f'))]), Body([Div([H1(Text('Y')), H2(Text('Y')), Ul([Li(Text('ds')), Li(Text('fdfd'))]), Ol(Li(Text('sd')))]), H1(Text('Y')), Br(),H2(Text('Y')), Table(Tr(Td(Text("sdsd")))),Ul(Li(Text('asdsd'))), Ol(Li(Text('xxx'))), Span(P(Text('TEXT'))), Text('I AM INSIDE BODY')])])
+        t = Html([Head([Title(Text('f'))]), Body([
+            Div([H1(Text('Y')), 
+                                                       H2(Text('Y')), Ul([Li(Text('ds')), Li(Text('fdfd'))]), Ol(Li(Text('sd')))]), H1(Text('Y')), Br(),H2(Text('Y')), Table(Tr(Td(Text("sdsd")))),Ul(Li(Text('asdsd'))), Ol(Li(Text('xxx'))), Span(P(Text('TEXT'))), Text('I AM INSIDE BODY')])])
         a = Page(t)
         # print(f'{t}')
         print(a.is_valid())
