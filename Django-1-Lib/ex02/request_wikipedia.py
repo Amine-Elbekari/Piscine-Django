@@ -45,18 +45,20 @@ def clean_content(content):
                content = content[:start] + content[end + 1:]
           else:
                break
-     
+     content = content.replace('(', '')
+     content = content.replace(')', '')
      return content
 
 def wiki_search():
 
+    suggestion = False
     if len(sys.argv) == 2:
           content_to_search = sys.argv[1]
           s = requests.Session()
           HEADERS = {
                'User-Agent': 'MyWikiRequestScript/1.0 (contact: amine.elbekari13@gmail.com)'
           }
-          URL = 'https://en.wikipedia.org/w/api.php'
+          URL = 'https://fr.wikipedia.org/w/api.php'
           PARAMS_TO_SEARCH = {
                "action": "query",
                "format": "json",
@@ -92,9 +94,8 @@ def wiki_search():
     
           with open('file_content.json', 'w') as f:
                json.dump(response_content, f, indent=4)
-
-          current_title = current_title.replace(' ', '_')
-          with open(f'{current_title}.wiki', 'w', encoding='utf-8') as outfile:
+          to_search = sys.argv[1].replace(' ', '_')
+          with open(f'{to_search}.wiki', 'w', encoding='utf-8') as outfile:
               outfile.write(content_cleaned)
 
     else:
