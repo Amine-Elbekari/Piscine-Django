@@ -13,7 +13,7 @@ Below is a breakdown of the specific modules and the problems I solved in each.
 
 ---
 
-## 🏗️ Module 00: Initiation
+## 🏗️ Day 00: Initiation
 **Focus:** Web Fundamentals, HTTP, & Strict Standards
 
 Before touching a backend language, this module enforced a rigorous understanding of the frontend standards that Django eventually abstracts away. It wasn't just about "making it look good," but about strict compliance and understanding the request cycle.
@@ -22,7 +22,7 @@ Before touching a backend language, this module enforced a rigorous understandin
 * **Strict HTML/CSS:** Built a resume and a contact form from scratch, adhering to strict W3C validation standards without reliance on frameworks.
 * **Reverse Engineering:** Replicated a specific webpage design (pixel-perfect) using only the provided assets and CSS, learning to interpret design specs accurately.
 
-## 🐍 Module 00: Starting
+## 🐍 Day 00: Starting
 **Focus:** Python Syntax & Data Structures
 
 This module was the "bootcamp within a bootcamp," designed to transition from C to Python. It focused on Pythonic syntax, data manipulation, and the language's philosophy.
@@ -30,7 +30,7 @@ This module was the "bootcamp within a bootcamp," designed to transition from C 
 * **Data Structures:** Solved algorithmic problems using dictionaries and lists to manage and sort data (e.g., mapping musicians to their birth years).
 * **Periodic Table Generator:** Created a script that parses a raw text file of chemical elements and programmatically generates a valid HTML Periodic Table, bridging the gap between data processing and frontend rendering.
 
-## 🧩 Module 00: OOB (Object Oriented Basics)
+## 🧩 Day 00: OOB (Object Oriented Basics)
 **Focus:** Advanced OOP & Pythonic Design Patterns
 
 Here, I built a custom template engine and an HTML generator to deeply understand Object-Oriented Programming in Python, specifically inheritance and magic methods.
@@ -41,7 +41,7 @@ Here, I built a custom template engine and an HTML generator to deeply understan
 
 ---
 
-## 📦 Module 01: Libraries
+## 📦 Day 01: Libraries
 **Focus:** Environment Management, Scraping, & APIs
 
 Modern development relies on the ecosystem. This module covered package management (`pip`, `virtualenv`) and interacting with external data.
@@ -50,7 +50,7 @@ Modern development relies on the ecosystem. This module covered package manageme
 * **API Interaction:** Built a CLI tool to query the Wikipedia API and format the results, handling JSON responses and error states gracefully.
 * **Web Scraping (BeautifulSoup):** Developed "Roads to Philosophy," a scraper that navigates Wikipedia links to test the theory that all articles eventually link to the "Philosophy" page, handling cycles and dead ends.
 
-## 🌐 Module 01: Base Django
+## 🌐 Day 01: Base Django
 **Focus:** The Django Framework & MVT Architecture
 
 My first steps into Django proper. The goal was to understand the Model-View-Template architecture without relying on "magic" shortcuts.
@@ -61,7 +61,7 @@ My first steps into Django proper. The goal was to understand the Model-View-Tem
 
 ---
 
-## 🗄️ Module 02: ORM (Object-Relational Mapping)
+## 🗄️ Day 02: ORM (Object-Relational Mapping)
 **Focus:** SQL vs. ORM
 
 This was a comparative study. I had to implement the exact same features twice: once using raw SQL with `psycopg2`, and again using Django's ORM. This solidified my understanding of what the ORM actually does under the hood.
@@ -72,7 +72,7 @@ This was a comparative study. I had to implement the exact same features twice: 
 
 ---
 
-## 🔐 Module 03: Sessions
+## 🔐 Day 03: Sessions
 **Focus:** Authentication, Cookies, & Business Logic
 
 This module focused on user state. I built a "Life Pro Tips" application that required complex session management and permission logic.
@@ -81,7 +81,7 @@ This module focused on user state. I built a "Life Pro Tips" application that re
 * **Custom Auth:** Built a full registration and login system, replacing Django's default User model with a custom implementation to handle reputation scoring.
 * **Reputation System:** Engineered a permission system (similar to StackOverflow) where user rights (voting, deleting posts) are dynamically granted based on a "Reputation" score derived from upvotes/downvotes.
 
-## 🚀 Module 03: Advanced
+## 🚀 Day 03: Advanced
 **Focus:** Generic Views & Internationalization
 
 Refactoring and optimizing. I took standard function-based views and converted them into robust, reusable Class-Based Views.
@@ -92,7 +92,7 @@ Refactoring and optimizing. I took standard function-based views and converted t
 
 ---
 
-## ⚡ Module 03: Final (Real-time Web)
+## ⚡ Day 03: Final (Real-time Web)
 **Focus:** AJAX, Websockets, & Asynchronous Django
 
 The final challenge broke the request/response cycle. I built a real-time chat application.

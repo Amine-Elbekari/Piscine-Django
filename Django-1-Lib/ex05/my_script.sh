@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 VENV_NAME='django_venv'
 
@@ -11,7 +11,7 @@ else
     ACTIVATE_FILE="$VENV_NAME/bin/activate"
 fi
 
-. "$ACTIVATE_FILE"
+source "$ACTIVATE_FILE"
 pip install -r requirement.txt
 
 exec bash --rcfile <(echo ". ~/.bashrc; . $ACTIVATE_FILE")
