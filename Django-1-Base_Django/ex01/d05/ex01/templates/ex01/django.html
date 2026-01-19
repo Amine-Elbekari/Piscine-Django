@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    <title>Ex01: Django, framework web.</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'ex01/style1.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>What is Django?</h2>
+        <p>
+            Django is a Python web framework that helps developers build web applications faster and more easily.
+            It handles complex tasks such as database connections, authentication, and CRUD operations, allowing
+            developers to focus on application logic.
+        </p>
+        <p>
+            Django follows the DRY principle (Don't Repeat Yourself) and is especially useful for database-driven websites.
+        </p>
+
+        <h2>How Does Django Work?</h2>
+        <p>
+            Django uses the MVT (Model View Template) design pattern.
+        </p>
+
+        <ul>
+            <li><strong>Model:</strong> Manages data and communicates with the database using ORM.</li>
+            <li><strong>View:</strong> Handles user requests, processes data, and sends it to templates.</li>
+            <li><strong>Template:</strong> Defines how data is displayed, usually using HTML with Django tags.</li>
+        </ul>
+
+        <h2>URL Handling</h2>
+        <p>
+            Django uses a URL configuration file (<code>urls.py</code>) to map URLs to specific views.
+        </p>
+
+        <h2>Request Flow</h2>
+        <ol>
+            <li>The browser sends a URL request.</li>
+            <li>Django matches the URL in <code>urls.py</code>.</li>
+            <li>The corresponding view processes the request.</li>
+            <li>Data is retrieved from models.</li>
+            <li>The template renders HTML and returns it to the browser.</li>
+        </ol>
+
+        <h2>Django History</h2>
+        <p>
+            Django was created in 2003 and released publicly in July 2005. It was designed to meet tight deadlines
+            while maintaining clean and reusable code.
+        </p>
+    </div>
+{% endblock %}
