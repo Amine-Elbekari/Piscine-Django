@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Ex01: Template Engine</title>
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+<div>
+    <h1>How Django's Default Template Engine Works</h1>
+
+    <p>
+        A template in Django is a text file, usually an HTML file, that defines the static structure
+        of a web page and contains special syntax for inserting dynamic content.
+        Django uses the <strong>Django Template Language (DTL)</strong> as its default template engine.
+        DTL allows developers to write templates using variables, filters, and template tags to control
+        how data is displayed.
+    </p>
+
+    <p>
+        When a template is rendered, Django parses and compiles it into an internal representation.
+        This representation may be cached in memory for performance reasons. The template engine then
+        combines the template with context data provided by the view and produces a final HTML string,
+        which is returned to the client as part of an HTTP response.
+    </p>
+
+    <h2>Template Tags</h2>
+
+    <h3>Block Tag</h3>
+    <p>
+        The <code>block</code> tag is used to support template inheritance and serves different roles
+        depending on where it is defined.
+    </p>
+    <ul>
+        <li>
+            In a base (parent) template, a block acts as a placeholder that child templates can override.
+        </li>
+        <li>
+            In a child template, a block provides content that replaces the corresponding block
+            in the base template.
+        </li>
+    </ul>
+
+    <h3>Loops: for ... in</h3>
+    <p>
+        The <code>for</code> tag is used to iterate over sequences such as lists, dictionaries,
+        or querysets.
+    </p>
+
+    <h4>Keywords</h4>
+    <ul>
+        <li>
+            <strong>reversed</strong>: iterates over the sequence in reverse order.
+        </li>
+        <li>
+            <strong>empty</strong>: defines a block that is rendered if the sequence is empty
+            or does not exist.
+        </li>
+    </ul>
+
+    <h4>Loop Variables</h4>
+    <ul>
+        <li><strong>forloop.counter</strong>: current iteration, starting at 1.</li>
+        <li><strong>forloop.counter0</strong>: current iteration, starting at 0.</li>
+        <li><strong>forloop.first</strong>: true if this is the first iteration.</li>
+        <li><strong>forloop.last</strong>: true if this is the last iteration.</li>
+        <li><strong>forloop.revcounter</strong>: iterations remaining, starting at 1.</li>
+        <li><strong>forloop.revcounter0</strong>: iterations remaining, starting at 0.</li>
+        <li><strong>forloop.length</strong>: total number of items in the loop.</li>
+        <li><strong>forloop.parentloop</strong>: reference to the surrounding loop in nested loops.</li>
+    </ul>
+
+    <h3>If Control Structures</h3>
+
+    <h4>If Statement</h4>
+    <ul>
+        <li>
+            The <code>if</code> tag evaluates a condition and renders a block of content
+            if the condition is true.
+        </li>
+    </ul>
+
+    <h4>Elif</h4>
+    <ul>
+        <li>
+            The <code>elif</code> tag is evaluated if previous conditions are false.
+        </li>
+    </ul>
+
+    <h4>Else</h4>
+    <ul>
+        <li>
+            The <code>else</code> tag renders content when none of the preceding conditions are met.
+        </li>
+    </ul>
+
+    <h4>Operators</h4>
+    <p>
+        Django template <code>if</code> tags support a limited set of logical and comparison operators
+        used to evaluate conditions.
+    </p>
+    <ul>
+        <li><strong>and / or</strong>: combine multiple conditions.</li>
+        <li><strong>== / !=</strong>: test equality or inequality.</li>
+        <li><strong>&lt; &gt; &lt;= &gt;=</strong>: compare numeric or comparable values.</li>
+        <li><strong>in / not in</strong>: test membership in a list, dictionary, or queryset.</li>
+        <li><strong>is / is not</strong>: test identity or boolean values such as <code>None</code>.</li>
+    </ul>
+
+    <h3>Display of Passing Context Variables</h3>
+    <p>
+        Context variables are passed from the view to the template as a dictionary,
+        where each key represents a variable name and each value represents the corresponding data.
+        This context is provided to the template when rendering the response using the
+        <strong>render()</strong> function.
+    </p>
+    <p>
+        Inside the template, context variables are accessed and displayed using double curly braces
+        (<code>{{ variable_name }}</code>). During rendering, the template engine replaces these variables
+        with their actual values in the final HTML output.
+    </p>
+
+</div>
+{% endblock %}

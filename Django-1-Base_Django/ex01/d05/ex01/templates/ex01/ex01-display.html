@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Ex01: Display process of a static page.</title>
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+<div class='.text'>
+    <h1>How static page is displayed?</h1>
+    <p>
+        When a client sends an HTTP request, it is first received by the web server <strong>such as Nginx or Apache</strong>. The web server passes the request to the WSGI interface, which provides a standardized way for Django to receive the request as Python objects.
+        Django then processes the request by checking the URL patterns defined in urls.py. If a matching path is found, the corresponding view function is called.
+        The view uses Django's template engine to load and render the appropriate template, inserting any required variables. For a static page, no database access is required.
+        The rendered HTML is returned by the view as an HttpResponse object, which is sent back through WSGI and the web server to the client, where the browser displays the page.
+    </p>
+</div>
+{% endblock %}
