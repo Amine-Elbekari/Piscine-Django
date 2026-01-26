@@ -1,20 +1,13 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang='en'>
     <head>
         {% block title %}
         {% endblock  %}
-
         {% block style %}
-            <link rel='stylesheet' href="{% static 'ex01/style1.css' %}">
-        {% endblock %}
+        {% endblock  %}
     </head>
-    <body>
-        <div class='.text'>
-            {% block navbar %}
-            {% endblock  %}
-
+    <body>        
+        <div>
             {% block content %}
             {% endblock %}
         </div>

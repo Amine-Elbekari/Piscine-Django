@@ -1,5 +1,5 @@
 from django.shortcuts import render
 # Create your views here.
 
-def index(request):
-    render(request, 'ex00/index.html')
+def markdown_syntax(request):
+    return render(request, 'ex00/index.html')

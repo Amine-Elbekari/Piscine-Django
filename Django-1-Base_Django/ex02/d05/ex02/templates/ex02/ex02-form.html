@@ -1,0 +1,21 @@
+{% extends 'ex02/base.html' %}
+
+{% block title %}
+    <title>Ex02 Form</title>
+{% endblock  %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <input type='submit' value='Ok'>
+        <hr>
+        <h3>History: </h3>
+        <ul>
+            {% for data in history %}
+                <li>{{ data }}</li>
+            {% endfor %}
+        </ul>
+    </form>
+{% endblock  %}
