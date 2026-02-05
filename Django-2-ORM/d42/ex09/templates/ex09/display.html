@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}  {% block title %}
+<title>Display ORM</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'style_table.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if error_message %}
+        <div class="error-box">
+            {{ error_message }} <br>
+            <code>{{ command }}</code>
+        </div>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Character Name</th>
+                    <th>Homeworld</th>
+                    <th>Climate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in people %}
+                <tr>
+                    <td>{{ person.name }}</td>
+                    
+                    {% if person.homeworld %}
+                        <td>{{ person.homeworld.name }}</td>
+                        <td>{{ person.homeworld.climate }}</td>
+                    {% else %}
+                        <td style="color: gray; font-style: italic;">Unknown</td>
+                        <td style="color: gray;">-</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

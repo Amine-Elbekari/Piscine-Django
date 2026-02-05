@@ -1,0 +1,18 @@
+from django import forms
+
+class DropDown(forms.Form):
+    films_titles = forms.CharField(label='Films Titles', max_length=64)
+    def clean_films_titles(self):
+        data = self.cleaned_data.get('films_titles')
+        if not data:
+            raise forms.ValidationError('No data provided')    
+        return data
+
+class OpeningCrawl(forms.Form):
+    opening_crawl = forms.CharField(label='Opening Crawl')
+    def clean_opening_crawl(self):
+        
+        data = self.cleaned_data.get('opening_crawl')
+        if not data:
+            raise forms.ValidationError('No data provided')
+        return data

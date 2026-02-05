@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Display SQL TABLE</title>
+{% endblock  %}
+{% comment %} {% block style %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+{% endblock  %} {% endcomment %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Episode Number</th>
+                <th>Title</th>
+                <th>Director</th>
+                <th>Producer</th>
+                <th>Release date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if results %}
+                {% for data in results %}
+                    <tr>
+                        <td>{{ data.0 }}</td>
+                        <td>{{ data.1 }}</td>
+                        <td>{{ data.2 }}</td>
+                        <td>{{ data.3 }}</td>
+                        <td>{{ data.4 }}</td>
+                    </tr>
+                {% endfor %}
+            
+            {% else %}
+                <tr>
+                    <td colspan="5" class="no-data">No data available</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    </table>
+{% endblock  %}
