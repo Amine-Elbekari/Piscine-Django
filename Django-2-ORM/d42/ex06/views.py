@@ -10,7 +10,6 @@ import psycopg2
 
 def init(request):
 
-
     try:
         
         query = sql.SQL("""

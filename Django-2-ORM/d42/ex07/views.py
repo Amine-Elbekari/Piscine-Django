@@ -23,16 +23,16 @@ def populate(request):
 
 def display(request):
     
-    results = Movies.objects.all()
+    results = Movies.objects.all().order_by('episode_nb')
     if not results.exists():
         return HttpResponse("No data available")
     return render(request, 'ex07/display.html', {'results': results})
 
 def update(request):
     movies_titles = Movies.objects.all().order_by('episode_nb')
-    choices = ((movie.title, movie.title) for movie in movies_titles)
     if not movies_titles.exists():
         return HttpResponse('No data available')
+    choices = ((movie.title, movie.title) for movie in movies_titles)
     
     if request.method == 'POST':
         form = MoviesTitles(request.POST)
