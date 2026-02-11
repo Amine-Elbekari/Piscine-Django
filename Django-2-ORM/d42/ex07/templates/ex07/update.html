@@ -7,15 +7,11 @@
 {% block content %}
 
     <h1>Update a Movie</h1>
-    {% if choices %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <br></br>
-            {{ opening_crawl_form.as_p }}
-            <input type="submit" value="update">
-        </form>
-    {% else %}
-        <p>No movies availble to update. </p>
-    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br></br>
+        {{ opening_crawl_form.as_p }}
+        <input type="submit" value="update">
+    </form>
 {% endblock  %}

@@ -7,23 +7,10 @@
 {% block content %}
 
     <h1>Update a Movie</h1>
-    {% if choices %}
-        <form method="post">
-            {% csrf_token %}
-            <label for="films_titles">Select movie to set it's opening crawl:</label>
-            <select name="films_titles" id="films_titles">
-                {% for title in choices %}
-                    <option value="{{ title }}">{{ title }}</option>
-                {% endfor %}
-            </select>
-
-            <br></br>
-
-            <label for="opening_crawl">New Opening Crawl :</label>
-            <input id="opening_crawl" type="text" name="opening_crawl" required>
-            <input type="submit" value="update">
-        </form>
-    {% else %}
-        <p>No movies availble to remove. </p>
-    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ opening_form.as_p }}
+        <input type="submit" value="update">
+    </form>
 {% endblock  %}

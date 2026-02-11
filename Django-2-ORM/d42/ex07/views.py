@@ -8,31 +8,49 @@ def populate(request):
     
     try:
         movies_list = [
-            Movies(episode_nb=1, title='The Phantom Menace', director='George Lucas', producer='Rick McCallum', release_date='1999-05-19'),
-            Movies(episode_nb=2, title='Attack of the Clones', director='George Lucas', producer='Rick McCallum', release_date='2002-05-16'),
-            Movies(episode_nb=3, title='Revenge of the Sith', director='George Lucas', producer='Rick McCallum', release_date='2005-05-19'),
-            Movies(episode_nb=4, title='A New Hope' , director='George Lucas, Gary Kurtz', producer='Rick McCallum', release_date='1977-05-25'),
-            Movies(episode_nb=5, title='The Empire Strikes Back', director='Irvin Kershner', producer='Gary Kurtz, Rick McCallum', release_date='1980-05-17'),
-            Movies(episode_nb=6, title='Return of the Jedi', director='Richard Marquand', producer='Howard G. Kazanjian, George Lucas, Rick McCallum', release_date='1983-05-25'),
-            Movies(episode_nb=7, title='The Force Awakens', director='J. J. Abrams, Kathleen Kennedy', producer='J. J. Abrams, Bryan Burk', release_date='2015-12-11')
+            Movies(episode_nb=1, title='The Phantom Menace', opening_crawl=None, director='George Lucas', producer='Rick McCallum', release_date='1999-05-19'),
+            Movies(episode_nb=2, title='Attack of the Clones', opening_crawl=None, director='George Lucas', producer='Rick McCallum', release_date='2002-05-16'),
+            Movies(episode_nb=3, title='Revenge of the Sith', opening_crawl=None, director='George Lucas', producer='Rick McCallum', release_date='2005-05-19'),
+            Movies(episode_nb=4, title='A New Hope', opening_crawl=None, director='George Lucas', producer='Gary Kurtz, Rick McCallum', release_date='1977-05-25'),
+            Movies(episode_nb=5, title='The Empire Strikes Back', opening_crawl=None, director='Irvin Kershner', producer='Gary Kurtz, Rick McCallum', release_date='1980-05-17'),
+            Movies(episode_nb=6, title='Return of the Jedi', opening_crawl=None, director='Richard Marquand', producer='Howard G. Kazanjian, George Lucas, Rick McCallum', release_date='1983-05-25'),
+            Movies(episode_nb=7, title='The Force Awakens', opening_crawl=None, director='J. J. Abrams', producer='Kathleen Kennedy, J. J. Abrams, Bryan Burk', release_date='2015-12-11')
         ]
-        Movies.objects.bulk_create(movies_list)
-        return HttpResponse("OK")
+        results = []
+        for movie in movies_list:
+            try:
+                Movies.objects.create(
+                    episode_nb=movie.episode_nb,
+                    title=movie.title,
+                    opening_crawl=movie.opening_crawl,
+                    director=movie.director,
+                    producer=movie.producer,
+                    release_date=movie.release_date,
+                )
+                results.append("OK")
+            except Exception as e:
+                results.append(f"Error: {e}")
+        return HttpResponse("<br>".join(results))
     except Exception as e:
-        return HttpResponse("No data available")
+        return HttpResponse(f"Error: {e}")
 
 def display(request):
-    
-    results = Movies.objects.all().order_by('episode_nb')
-    if not results.exists():
+    try:
+        results = Movies.objects.all().order_by('episode_nb')
+        if not results.exists():
+            return HttpResponse("No data available")
+        return render(request, 'ex07/display.html', {'results': results})
+    except Exception:
         return HttpResponse("No data available")
-    return render(request, 'ex07/display.html', {'results': results})
 
 def update(request):
-    movies_titles = Movies.objects.all().order_by('episode_nb')
-    if not movies_titles.exists():
+    try:
+        movies_titles = Movies.objects.all().order_by('episode_nb')
+        if not movies_titles.exists():
+            return HttpResponse('No data available')
+        choices = [(movie.title, movie.title) for movie in movies_titles]
+    except Exception:
         return HttpResponse('No data available')
-    choices = ((movie.title, movie.title) for movie in movies_titles)
     
     if request.method == 'POST':
         form = MoviesTitles(request.POST)
@@ -51,7 +69,6 @@ def update(request):
         opening_crawl_form = OpeningCrawl()
     return render(request, 'ex07/update.html', {
         'form': form,
-        'opening_crawl_form': opening_crawl_form,
-        'choices': choices
+        'opening_crawl_form': opening_crawl_form
     })
            

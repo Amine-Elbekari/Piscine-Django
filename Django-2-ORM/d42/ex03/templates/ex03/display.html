@@ -10,6 +10,7 @@
             <tr>
                 <th>Episode Number</th>
                 <th>Title</th>
+                <th>Opening Crawl</th>
                 <th>Director</th>
                 <th>Producer</th>
                 <th>Release date</th>
@@ -18,20 +19,14 @@
         <tbody>
                 {% for data in results %}
                     <tr>
-                        <td>{{ data.title }}</td>
                         <td>{{ data.episode_nb }}</td>
+                        <td>{{ data.title }}</td>
+                        <td>{{ data.opening_crawl }}</td>
                         <td>{{ data.director }}</td>
                         <td>{{ data.producer }}</td>
                         <td>{{ data.release_date }}</td>
                     </tr>
                 {% endfor %}
-            
-            {% comment %} {% else %}
-                <tr>
-                    <td colspan="5" class="no-data">No data available</td>
-                </tr>
-            {% endif %} {% endcomment %}
         </tbody>
-    </table>
     </table>
 {% endblock  %}

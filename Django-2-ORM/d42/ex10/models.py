@@ -3,13 +3,13 @@ from django.db import models
 # Create your models here.
 class Planets(models.Model):
     name = models.CharField(max_length=64, unique=True, null=False)
-    climate = models.CharField(max_length=255,null=True)
+    climate = models.TextField(null=True)
     diameter = models.PositiveIntegerField(null=True)
     orbital_period = models.PositiveIntegerField(null=True)
     population = models.BigIntegerField(null=True)
     rotation_period = models.PositiveIntegerField(null=True)
     surface_water = models.FloatField(null=True)
-    terrain = models.CharField(max_length=50,null=True)
+    terrain = models.TextField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
@@ -24,7 +24,7 @@ class People(models.Model):
     hair_color = models.CharField(max_length=32, null=True)
     height = models.PositiveIntegerField(null=True)
     mass = models.FloatField(null=True)
-    homeworld = models.ForeignKey(Planets, to_field='name' ,on_delete=models.CASCADE, null=True)
+    homeworld = models.ForeignKey(Planets, to_field='name', db_column='homeworld', on_delete=models.CASCADE, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
     

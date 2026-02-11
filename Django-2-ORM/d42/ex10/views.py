@@ -24,7 +24,7 @@ def display(request):
                 max_date = maximum_date.cleaned_data['max_date']
                 planet_diameter = planet_diameter_gthen.cleaned_data['planet_diameter']
                 results = People.objects.filter(gender=gender,
-                    homeworld__diameter__gt=planet_diameter,
+                    homeworld__diameter__gte=planet_diameter,
                     movies__release_date__range=(min_date, max_date)
                 ).values(
                     'name',

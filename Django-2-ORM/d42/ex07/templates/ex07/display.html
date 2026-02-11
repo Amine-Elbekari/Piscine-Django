@@ -21,8 +21,8 @@
         <tbody>
                 {% for data in results %}
                     <tr>
-                        <td>{{ data.title }}</td>
                         <td>{{ data.episode_nb }}</td>
+                        <td>{{ data.title }}</td>
                         <td>{{ data.director }}</td>
                         <td>{{ data.producer }}</td>
                         <td>{{ data.release_date }}</td>
@@ -38,6 +38,5 @@
                 </tr>
             {% endif %} {% endcomment %}
         </tbody>
-    </table>
     </table>
 {% endblock  %}

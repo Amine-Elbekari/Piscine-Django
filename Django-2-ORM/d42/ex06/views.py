@@ -15,7 +15,7 @@ def init(request):
         query = sql.SQL("""
             CREATE TABLE IF NOT EXISTS ex06_movies (
                 title VARCHAR(64) UNIQUE NOT NULL,
-                episode_nb INTEGER PRIMARY KEY CHECK (episode_nb > 0),
+                episode_nb INTEGER PRIMARY KEY,
                 director VARCHAR(32) NOT NULL,
                 producer VARCHAR(128) NOT NULL,
                 opening_crawl TEXT,
@@ -49,45 +49,36 @@ def init(request):
             cursor.execute(query_drop_trigger)
             cursor.execute(query_create_trigger)
         return HttpResponse("OK")
-    except Exception:
-            return HttpResponse("No data available")
+    except Exception as e:
+            return HttpResponse(f"Error: {e}")
         
 
 def populate(request):
     
     movies = [
-        (1, 'The Phantom Menace', 'George Lucas', 'Rick McCallum', '1999-05-19'),
-        (2, 'Attack of the Clones', 'George Lucas', 'Rick McCallum', '2002-05-16'),
-        (3, 'Revenge of the Sith', 'George Lucas', 'Rick McCallum', '2005-05-19'),
-        (4, 'A New Hope' , 'George Lucas, Gary Kurtz', 'Rick McCallum', '1977-05-25'),
-        (5, 'The Empire Strikes Back', 'Irvin Kershner', 'Gary Kurtz, Rick McCallum', '1980-05-17'),
-        (6, 'Return of the Jedi', 'Richard Marquand', 'Howard G. Kazanjian, George Lucas, Rick McCallum', '1983-05-25'),
-        (7, 'The Force Awakens', 'J. J. Abrams, Kathleen Kennedy', 'J. J. Abrams, Bryan Burk', '2015-12-11'),
+        (1, 'The Phantom Menace', None, 'George Lucas', 'Rick McCallum', '1999-05-19'),
+        (2, 'Attack of the Clones', None, 'George Lucas', 'Rick McCallum', '2002-05-16'),
+        (3, 'Revenge of the Sith', None, 'George Lucas', 'Rick McCallum', '2005-05-19'),
+        (4, 'A New Hope', None, 'George Lucas', 'Gary Kurtz, Rick McCallum', '1977-05-25'),
+        (5, 'The Empire Strikes Back', None, 'Irvin Kershner', 'Gary Kurtz, Rick McCallum', '1980-05-17'),
+        (6, 'Return of the Jedi', None, 'Richard Marquand', 'Howard G. Kazanjian, George Lucas, Rick McCallum', '1983-05-25'),
+        (7, 'The Force Awakens', None, 'J. J. Abrams', 'Kathleen Kennedy, J. J. Abrams, Bryan Burk', '2015-12-11'),
     ]
     result_msg = []
-    
-    try:
-        query = """
-            INSERT INTO ex06_movies (episode_nb, title, director, producer, release_date)
-            VALUES (%s, %s, %s, %s, %s);
-        """
-        with connection.cursor() as cursor:
-            
-            for movie in movies:
-                episode_nb = movie[0]
-                
-                cursor.execute("SELECT episode_nb FROM ex06_movies WHERE episode_nb = %s;", [episode_nb])
-                already_exist = cursor.fetchone()
-                
-                if not already_exist:
-                    cursor.execute(query, movie)
-                    result_msg.append("OK")
-    except Exception as e:
-        return HttpResponse(f"Error: {e}")
-    if result_msg:
-        return HttpResponse("<br>".join(result_msg))
-    else:
-        return HttpResponse("No data available")
+
+    query = """
+        INSERT INTO ex06_movies (episode_nb, title, opening_crawl, director, producer, release_date)
+        VALUES (%s, %s, %s, %s, %s, %s);
+    """
+    for movie in movies:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(query, movie)
+            result_msg.append("OK")
+        except Exception as e:
+            connection.rollback()
+            result_msg.append(f"Error: {e}")
+    return HttpResponse("<br>".join(result_msg))
 
 def display(request):
     
@@ -100,6 +91,8 @@ def display(request):
         with connection.cursor() as cursor:
             cursor.execute(query)
             results = cursor.fetchall()
+        if not results:
+            return HttpResponse('No data available')
         return render(request, 'ex06/display.html', {'results': results})
         
     except Exception as e:
@@ -111,11 +104,14 @@ def update(request):
         with connection.cursor() as cursor:
             cursor.execute("SELECT title from ex06_movies ORDER BY title;")
             choices = [row[0] for row in cursor.fetchall()]
-    except psycopg2.Error as e:
-        print(f"Database Error: {e}")
+    except psycopg2.Error:
+        return HttpResponse("No data available")
+
+    if not choices:
+        return HttpResponse("No data available")
     
     if request.method == 'POST':
-        form = DropDown(request.POST)
+        form = DropDown(choices, request.POST)
         form_opening_crawl = OpeningCrawl(request.POST)
         if form.is_valid() and form_opening_crawl.is_valid():
             title = form.cleaned_data['films_titles']
@@ -127,10 +123,9 @@ def update(request):
             except psycopg2.Error as e:
                 return HttpResponse("No data available")
         return HttpResponseRedirect('/ex06/update')
-    else:
-        form = DropDown()
-        form_opening_crawl = OpeningCrawl()
+    form = DropDown(choices)
+    form_opening_crawl = OpeningCrawl()
     return render(request, 'ex06/update.html', {
         'form': form,
-        'choices': choices,
+        'opening_form': form_opening_crawl,
     })
