@@ -8,6 +8,36 @@
         {% endblock  %}
     </head>
     <body>
+        <nav>
+            {% if not user.is_authenticated %}
+                    {% if request.path == '/account/login/' %}
+                    
+                        <a href="{% url 'home' %}">Hello {{ setted_name }}!</a>
+                        <br>
+                        <a href="{% url 'signup' %}">Sign-Up</a>
+                   
+                    {% elif request.path == '/ex/registration/' %}
+                    
+                        <a href="{% url 'home' %}">Hello {{ setted_name }}!</a>
+                        <br>
+                        <a href="{% url 'login' %}">Sign-In</a>
+                    {% else %}
+                    
+                        <a>Hello {{ setted_name }}!</a>
+                        <br>
+                        <a href="{% url 'login' %}">Sign-In</a>
+                        <br>
+                        <a href="{% url 'signup' %}">Sign-Up</a>
+                    {% endif %}
+            {% else %}
+                <a>Hello {{ user.username }} !</a>
+                <br>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type='submit'>Log Out</button>
+                </form>
+            {% endif %}
+        </nav>
         <main>
             {% block content %}
             {% endblock  %}

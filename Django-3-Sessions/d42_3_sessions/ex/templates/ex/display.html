@@ -1,24 +1,51 @@
 {% extends "base.html" %}
 
-<div class="content">
-    {% block content %}
-        {% if not user.is_authenticated %}
-            <nav>
-                <a>Hello {{ setted_name }}!</a>
-                <br>
-                <a href="{% url 'login' %}">Sign-In</a>
-                <br>
-                <a href="{% url 'signup' %}">Sign-Up</a>
-            </nav>
-        {% else %}
-            <nav>
-                <a>Hello {{ user.username }}!</a>
-                <br>
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Log Out</button>
-                </form>
-            </nav>
-        {% endif %}
-    {% endblock %}
-</div>
+{% block content %}
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ tipform.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+        <br>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Content</th>
+                    <th>Author</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in data_tip %}
+                <tr>
+                    <td>{{ data.content }}</td>
+                    <td>{{ data.author }}</td>
+                    <td>{{ data.date }}</td>
+                    <td>
+                        {% comment %} {% if not user in data.upvotes.all %} {% endcomment %}
+                                <form action="{% url 'votes' data.id %}" method="post">
+                                    {% csrf_token %}
+                                        <button type="submit">UpVote</button>
+                                </form>
+                        {% comment %} {% endif %} {% endcomment %}
+                        Total UpVotes {{ data.get_upvote_count }}
+                        <form action="{% url 'votes' data.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit">DownVote</button>
+                        </form>
+                        Total DownVotes {{ data.get_downvote_count }}
+                        <form action="{% url 'removetip' data.id %}" method="delete">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+
+# Fabas@545
