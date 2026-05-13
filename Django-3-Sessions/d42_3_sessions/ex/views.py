@@ -15,21 +15,6 @@ import random
 def home(request):
 
     user = request.user
-    saved_time = time.time()
-    users = settings.ANYONYM_USERS
-    if not request.session.get('random_user'):
-        random_user = random.choice(users)
-        request.session['random_user'] = random_user
-        request.session['timestamp'] = saved_time
-    else:
-        current_time = time.time()
-        time_saved = request.session.get('timestamp')
-        if current_time - time_saved >= 42:
-            random_user = random.choice(users)
-            request.session['random_user'] = random_user
-            request.session['timestamp'] = current_time
-        if current_time - time_saved <= 42:
-            pass
     if request.method == 'POST':
 
         form = TipForm(request.POST)
@@ -68,17 +53,16 @@ def home(request):
 
 @login_required(login_url="/account/login/")
 def Upvotes(request, tip_id):
-    user = request.user
-    tips = get_object_or_404(ModelTip, id=tip_id)
+    if request.method == "POST":
+        user = request.user
+        tips = get_object_or_404(ModelTip, id=tip_id)
 
-    
-    if not tips.upvotes.filter(id=user.id).exists():
-        tips.upvotes.add(user)
-        if tips.downvotes.filter(id=user.id).exists():
-            tips.downvotes.remove(user)
-    else:
+        if not tips.upvotes.filter(id=user.id).exists():
+            tips.upvotes.add(user)
+            if tips.downvotes.filter(id=user.id).exists():
+                tips.downvotes.remove(user)
+        else:
             tips.upvotes.remove(user)
-
    
     return redirect("home")
 
@@ -114,15 +98,20 @@ def RemoveTip(request, tip_id):
     return redirect("home")
 
 class Registration(CreateView):
-    
     model = MyCustomUser
     form_class = MyUserForm
+    success_url = reverse_lazy("home")
+    template_name = "registration/signup.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("home")
+        return super().dispatch(request, *args, **kwargs)
+    
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
         return redirect("home")
-    success_url = reverse_lazy("home")
-    template_name = "registration/signup.html"
 # There is 3 States:
 # State 0: Neutral no upvote no downvote
 # State 1: Upvote 

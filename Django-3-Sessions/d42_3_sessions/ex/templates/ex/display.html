@@ -8,6 +8,8 @@
             <button type="submit">Submit</button>
         </form>
         <br>
+    {% endif %}
+    {% if data_tip or user.is_authenticated %}
         <table border="1">
             <thead>
                 <tr>
@@ -23,25 +25,29 @@
                     <td>{{ data.author }}[{{data.author.get_total_reputations}} reputation]</td>
                     <td>{{ data.date }}</td>
                     <td>
-                        {% comment %} {% if not user in data.upvotes.all %} {% endcomment %}
-                                <form action="{% url 'upvotes' data.id %}" method="post">
-                                    {% csrf_token %}
-                                        <button type="submit">UpVote</button>
-                                </form>
-                        {% comment %} {% endif %} {% endcomment %}
-                        Total UpVotes {{ data.get_upvote_count }}
-                        {% if user.get_total_reputations >= 15 or data.author == user or perms.ex.can_downvote %}
-                            <form action="{% url 'downvotes' data.id %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit">DownVote</button>
-                            </form>
-                            Total DownVotes {{ data.get_downvote_count }}
-                        {% endif %}
-                        {% if user.get_total_reputations >= 30 or data.author == user or perms.ex.delete_modeltip %}
-                            <form action="{% url 'removetip' data.id %}" method="post">
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'upvotes' data.id %}" method="post" style="display:inline;">
                                 {% csrf_token %}
-                                <button type="submit">Delete</button>
+                                    <button type="submit">UpVote</button>
                             </form>
+                        {% endif %}
+                        Total UpVotes {{ data.get_upvote_count }}
+                        {% if user.is_authenticated %}
+                            {% if user.get_total_reputations >= 15 or data.author == user or perms.ex.can_downvote %}
+                                <form action="{% url 'downvotes' data.id %}" method="post" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit">DownVote</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                        Total DownVotes {{ data.get_downvote_count }}
+                        {% if user.is_authenticated %}
+                            {% if user.get_total_reputations >= 30 or data.author == user or perms.ex.delete_modeltip %}
+                                <form action="{% url 'removetip' data.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit">Delete</button>
+                                </form>
+                            {% endif %}
                         {% endif %}
                     </td>
                 </tr>

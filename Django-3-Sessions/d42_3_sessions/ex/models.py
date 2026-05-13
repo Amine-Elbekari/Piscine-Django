@@ -55,8 +55,16 @@ class MyCustomUser(AbstractUser):
         
         tips = self.modeltip_set.all()
         
-        total_upvotes = tips.exclude(upvotes__id=self.pk).aggregate(total_upvotes=models.Count("upvotes"))['total_upvotes'] or 0
-        total_downvotes = tips.exclude(downvotes__id=self.pk).aggregate(total_downvotes=models.Count("downvotes"))['total_downvotes'] or 0
+        # We use filter inside Count to ONLY exclude the author's own votes,
+        # without removing the entire tip from the calculation!
+        total_upvotes = tips.aggregate(
+            total_upvotes=models.Count("upvotes", filter=~models.Q(upvotes=self))
+        )['total_upvotes'] or 0
+        
+        total_downvotes = tips.aggregate(
+            total_downvotes=models.Count("downvotes", filter=~models.Q(downvotes=self))
+        )['total_downvotes'] or 0
+        
         return (total_upvotes * 5) - (total_downvotes * 2)
 
 class ModelTip(models.Model):
