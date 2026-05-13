@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
@@ -10,9 +12,9 @@ from .forms import MyUserForm, TipForm
 import time
 import random
 # Create your views here.
-
 def home(request):
 
+    user = request.user
     saved_time = time.time()
     users = settings.ANYONYM_USERS
     if not request.session.get('random_user'):
@@ -39,39 +41,76 @@ def home(request):
         
     else:
         form = TipForm()
+        
     data_tip = ModelTip.objects.all()
+    users = MyCustomUser.objects.all()
+        
+    print(f"Fetch some data: {data_tip.count()} for User: {request.user}")
     return render(request, 'ex/display.html', {
         'tipform': form,
         'data_tip': data_tip,
+        'user': user,
+        'users': users,
     })
 
-def Votes(request, tip_id):
-    
+# @login_required(login_url="/account/login/")
+# def get_users_reputation(request, tip_id):
+#     user = request.user
+#     tips = get_object_or_404(ModelTip, id=tip_id)
+#     upvotes_exist = tips.upvotes.filter(id=user.id).exists()
+#     downtes_exist = tips.downvotes.filter(id=user.id).exists()
+#     if upvotes_exist or downtes_exist:
+#         total_user_reputation = (tips.get_upvote_count() * 5) - (tips.get_downvote_count() * 2)
+
+#         MyCustomUser.objects.create(reputation=total_user_reputation)
+
+
+
+@login_required(login_url="/account/login/")
+def Upvotes(request, tip_id):
     user = request.user
     tips = get_object_or_404(ModelTip, id=tip_id)
-    upvotes_exists = tips.upvotes.filter(id=user.id).exists()
-    downvotes_exists = tips.downvotes.filter(id=user.id).exists()
-    # is_upvotes = False
-    if not upvotes_exists and not downvotes_exists :
 
-        tips.upvotes.add(user)
-        # is_upvotes = True
     
-    elif not downvotes_exists and not upvotes_exists:
-
-        tips.downvotes.add(user)
-        # is_upvotes = False
-    elif upvotes_exists and not downvotes_exists:
-        tips.upvotes.remove(user)
-        tips.downvotes.add(user)
-    elif not upvotes_exists and downvotes_exists:
+    if not tips.upvotes.filter(id=user.id).exists():
         tips.upvotes.add(user)
-        tips.downvotes.remove(user)
+        if tips.downvotes.filter(id=user.id).exists():
+            tips.downvotes.remove(user)
+    else:
+            tips.upvotes.remove(user)
+
+   
     return redirect("home")
 
+@login_required(login_url="/account/login/")
+def Downvotes(request, tip_id):
+    user = request.user
+    tips = get_object_or_404(ModelTip, id=tip_id)
+    if request.method == "POST":
+        if user.get_total_reputations >= 15 or tips.author == user or user.has_perm('ex.can_downvote'):
+            if not tips.downvotes.filter(id=user.id).exists():
+                tips.downvotes.add(user)
+                if tips.upvotes.filter(id=user.id).exists():
+                    tips.upvotes.remove(user)
+            else:
+                tips.downvotes.remove(user)
+        else:
+            messages.error(request, "You can downvote only and only your own tip")
+    
+    return redirect("home")
+# Vivo@_#1234
+@login_required
 def RemoveTip(request, tip_id):
-    tips = ModelTip.objects.get(id=tip_id)
-    tips.delete()
+    user = request.user
+    tips = get_object_or_404(ModelTip, id=tip_id)
+    if request.method == 'POST':
+        if user.get_total_reputations >= 30 or tips.author == request.user or request.user.has_perm('ex.delete_modeltip'):
+            tips.delete()
+            messages.success(request, f"The tips {tips.content} of author {tips.author} delete successfully.")
+            return redirect("home")
+        else:
+            messages.error(request, "You don't have permissions to delete this tip , ask your ADMIN if you need such action")
+            return redirect("home")
     return redirect("home")
 
 class Registration(CreateView):

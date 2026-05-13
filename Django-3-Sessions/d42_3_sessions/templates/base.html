@@ -38,6 +38,17 @@
                 </form>
             {% endif %}
         </nav>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}" style="padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; 
+                        {% if message.tags == 'error' %}background-color: #f2dede; color: #a94442; border-color: #ebccd1;{% endif %}
+                        {% if message.tags == 'success' %}background-color: #dff0d8; color: #3c763d; border-color: #d6e9c6;{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         <main>
             {% block content %}
             {% endblock  %}

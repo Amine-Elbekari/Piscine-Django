@@ -46,10 +46,25 @@ from django.utils import timezone
         
 class MyCustomUser(AbstractUser):
 
-    pass
+    
+    @property
+    def get_total_reputations(self):
+
+        if not self.pk:
+            return 0
+        
+        tips = self.modeltip_set.all()
+        
+        total_upvotes = tips.exclude(upvotes__id=self.pk).aggregate(total_upvotes=models.Count("upvotes"))['total_upvotes'] or 0
+        total_downvotes = tips.exclude(downvotes__id=self.pk).aggregate(total_downvotes=models.Count("downvotes"))['total_downvotes'] or 0
+        return (total_upvotes * 5) - (total_downvotes * 2)
 
 class ModelTip(models.Model):
     
+    class Meta:
+        permissions = [
+            ('can_downvote', 'Can downvote its own tips or get permission from admin'),
+        ]
     content = models.CharField(max_length=150)
 
     author = models.ForeignKey(
@@ -66,6 +81,3 @@ class ModelTip(models.Model):
         return self.upvotes.count()
     def get_downvote_count(self):
         return self.downvotes.count()
-    def get_total_score(self):
-        return self.upvotes.count() - self.downvotes.count()
-
