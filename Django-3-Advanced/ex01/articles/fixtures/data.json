@@ -1,0 +1,142 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "Anass",
+      "password": "pbkdf2_sha256$1200000$uiWsNAnB5ClE8KP4Cb1H90$2xMf/o7VJTLQwLb/nJKZm4u5AcmoYD7kfqJaow0ij6Q=",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "Amine",
+      "password": "pbkdf2_sha256$1200000$uiWsNAnB5ClE8KP4Cb1H90$2xMf/o7VJTLQwLb/nJKZm4u5AcmoYD7kfqJaow0ij6Q=",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "Youssef",
+      "password": "pbkdf2_sha256$1200000$uiWsNAnB5ClE8KP4Cb1H90$2xMf/o7VJTLQwLb/nJKZm4u5AcmoYD7kfqJaow0ij6Q=",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 1,
+    "fields": {
+      "title": "Is AI just a Bubble or Revolution?",
+      "author": 1,
+      "created": "2026-05-15T10:30:00Z",
+      "synopsis": "Amidst the hype and skepticism surrounding artificial intelligence, this article examines whether AI represents a lasting technological revolution or merely an inflated bubble destined to burst.",
+      "content": "Artificial intelligence has dominated headlines, investment portfolios, and dinner table conversations for years. Supporters claim it will reshape every industry known to humanity, while skeptics draw uncomfortable parallels to the dot-com bubble of the early 2000s. The truth likely lives somewhere in between. Unlike the dot-com era, AI is built on decades of mathematical research and is already delivering measurable productivity gains across healthcare, logistics, and software engineering. However, valuations of AI companies have outpaced their revenues dramatically, and many promised applications remain far from production-ready. The key distinction is that the underlying technology is real and compounding — what is inflated is not AI itself, but the timeline expectations around it. Revolutions do not always arrive on schedule, but that does not make them any less inevitable."
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 2,
+    "fields": {
+      "title": "What is AI?",
+      "author": 2,
+      "created": "2026-05-19T08:30:00Z",
+      "synopsis": "A clear and accessible introduction to artificial intelligence, covering its definition, core branches, and the foundational concepts every curious mind should understand before diving deeper.",
+      "content": "Artificial intelligence, commonly abbreviated as AI, refers to the simulation of human-like cognitive processes by computer systems. These processes include learning from data, reasoning through problems, and making decisions with varying degrees of autonomy. AI is not a single technology but rather an umbrella term covering several disciplines. Machine learning allows systems to improve through experience without being explicitly programmed for each task. Deep learning, a subset of machine learning, uses layered neural networks inspired by the human brain to process complex inputs such as images and speech. Natural language processing enables machines to read, interpret, and generate human language. Together, these branches power the tools millions of people interact with daily — from search engines and recommendation systems to voice assistants and fraud detection algorithms."
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 3,
+    "fields": {
+      "title": "What are MultiAgents",
+      "author": 2,
+      "created": "2026-05-18T08:30:00Z",
+      "synopsis": "A multi-agent system (MAS) is a network of autonomous AI entities",
+      "content": "A multi-agent system (MAS) is a network of autonomous AI entities that collaborate, coordinate, or negotiate to solve complex, multi-step problems. Instead of relying on a single, monolithic AI, these systems distribute workflows across specialized agents, acting like a team of human experts working toward a shared goal."
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 4,
+    "fields": {
+      "title": "What are Agents?",
+      "author": 3,
+      "created": "2026-05-19T10:30:00Z",
+      "synopsis": "AI agents represent a fundamental shift in how we build and interact with intelligent systems. This article explores what agents are, how they reason and act, and why they are becoming the dominant paradigm in modern AI development.",
+      "content": "An AI agent is a system that perceives its environment, reasons about a goal, and takes actions autonomously to achieve it — often across multiple steps without human intervention at each turn. Unlike a simple chatbot that responds to a single prompt, an agent can plan, use tools, browse the web, write and execute code, and reflect on the results of its own actions to decide what to do next. The rise of large language models has made building capable agents significantly more accessible. Frameworks like LangChain, AutoGPT, and Anthropic's own tool-use API allow developers to equip models with memory, external tools, and structured reasoning loops. Agents are increasingly being deployed in software engineering, scientific research, customer support, and data analysis. Understanding agents is no longer optional for anyone serious about the future of AI — they are quickly becoming the primary interface between human intent and machine execution."
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 5,
+    "fields": {
+      "title": "How AI Affect Education?",
+      "author": 3,
+      "created": "2026-05-13T10:30:00Z",
+      "synopsis": "Artificial intelligence transforms education by providing hyper-personalized tutoring.",
+      "content": "Artificial intelligence transforms education by providing hyper-personalized tutoring, automating tedious administrative tasks for teachers, and increasing accessibility. However, it also introduces significant challenges, such as risks to critical thinking, over-reliance, and data privacy concerns."
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 6,
+    "fields": {
+      "title": "The Role of RAG in Modern AI",
+      "author": 1,
+      "created": "2026-05-20T11:00:00Z",
+      "synopsis": "Retrieval-Augmented Generation (RAG) is bridging the gap between static AI knowledge and dynamic real-world facts.",
+      "content": "Retrieval-Augmented Generation, or RAG, addresses one of the biggest limitations of large language models: hallucinations and static knowledge cutoffs. By connecting a generative model to an external vector database, RAG allows the AI to look up fresh, reliable documents before drafting a response. This architecture ensures responses are grounded in verifiable source materials, making it a vital asset for enterprise internal search engines, medical reference tools, and legal compliance workflows."
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 7,
+    "fields": {
+      "title": "The Ethics of Generative AI",
+      "author": 2,
+      "created": "2026-05-20T14:15:00Z",
+      "synopsis": "As creative tools become deeply democratized, we face essential questions surrounding intellectual property, deepfakes, and fair training data sets.",
+      "content": "Generative AI tools have lowered the entry barrier for content creation across text, imagery, and music. However, this shift comes with critical legal and moral friction. Many models were trained on copyrighted works without explicit creator consent, sparking systemic debates on intellectual property rights. Additionally, the ease of deploying authentic-looking deepfakes presents significant challenges for media trust and political integrity. Moving forward, balancing rapid technological open-source innovation with responsible guardrails is paramount."
+    }
+  },
+  {
+    "model": "articles.userfavouritearticle",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "article": 1
+    }
+  },
+  {
+    "model": "articles.userfavouritearticle",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "article": 4
+    }
+  },
+  {
+    "model": "articles.userfavouritearticle",
+    "pk": 3,
+    "fields": {
+      "user": 2,
+      "article": 2
+    }
+  }
+]

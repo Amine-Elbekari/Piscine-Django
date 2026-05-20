@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Articles</h2>
+
+    {% if favorite_articles %}
+                {% for article in favorite_articles %}
+                    <ul>
+                        <li><a href="{% url 'details' article.pk %}">{{ article.article.title }}</a></li>
+                    </ul>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No articles provided yet</h2>
+    {% endif %}
+{% endblock %}

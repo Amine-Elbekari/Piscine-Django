@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang='en'>
+    <head>
+        {% block title %}
+        {% endblock  %}
+        {% comment %} {% block style %}
+        {% endblock %} {% endcomment %}
+        {% comment %} <link rel="stylesheet" href="{% static 'style_table.css' %}"> {% endcomment %}
+    </head>
+    <body>        
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

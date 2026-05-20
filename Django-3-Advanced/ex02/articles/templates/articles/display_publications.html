@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Publications</h2>
+    <h3><a href="{% url 'publish' %}">Publish</a></h3>
+        {% if articles %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Created</th>
+                        <th>Synopsis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in articles %}
+                        {% if request.user == article.author %}
+                            <tr>
+                                <td><a href="{% url 'details' article.pk %}">{{ article.title }}</a></td>
+                                <td>{{ article.created }}</td>
+                                <td>{{ article.synopsis }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h2>No Publication provided yet by this user</h2>
+        {% endif %}
+{% endblock %}

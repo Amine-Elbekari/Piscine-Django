@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang='en'>
+    <head>
+        {% block title %}
+        {% endblock  %}
+        {% comment %} {% block style %}
+        {% endblock %} {% endcomment %}
+        {% comment %} <link rel="stylesheet" href="{% static 'style_table.css' %}"> {% endcomment %}
+    </head>
+    <body>
+        {% if request.user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                         <button type="submit">Log Out</button>
+                    </form>
+        {% endif %}
+        <div class="content">
+            {% block content %}
+                
+            {% endblock %}
+        </div>
+    </body>
+</html>
