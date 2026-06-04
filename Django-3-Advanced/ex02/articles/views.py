@@ -2,13 +2,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
+from django.contrib import messages
 from .models import Article, UserFavouriteArticle
-from .forms import PublicationForm
+from .forms import PublicationForm, AddFavoriteForm
 
 # Create your views here.
 class ListArticlFields(LoginRequiredMixin, ListView):
@@ -18,6 +19,7 @@ class ListArticlFields(LoginRequiredMixin, ListView):
     # article_list.html as default template name.
     context_object_name = "articles"
     template_name = 'articles/display_articles.html'
+
 
 class ListPublications(LoginRequiredMixin, ListView):
     model = Article
@@ -33,6 +35,8 @@ class ListDetails(LoginRequiredMixin, DetailView):
     model = Article
     context_object_name = "article"
     template_name = 'articles/details.html'
+
+
 
 class ListFavoriteArticles(LoginRequiredMixin, ListView):
     model = UserFavouriteArticle
@@ -69,4 +73,23 @@ class PublishView(LoginRequiredMixin,CreateView):
     
     def form_valid(self, form):
         form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class AddToFavorites(LoginRequiredMixin, CreateView):
+
+    form_class = AddFavoriteForm
+    template_name = 'articles/details.html'
+    # favorite_article = get_object_or_404(UserFavouriteArticle, id=article_id)
+    
+    def get_success_url(self):
+        return reverse_lazy('details', kwargs={'pk': self.kwargs['pk']})
+
+    
+    def form_valid(self, form):
+        article_id = Article.objects.get(pk=self.kwargs['pk'])
+        if UserFavouriteArticle.objects.filter(article=article_id, user=self.request.user).exists():
+            messages.error(self.request, 'This Article is Already in your favorite list')
+            return redirect(self.get_success_url())       
+        form.instance.article = article_id
+        form.instance.user = self.request.user
         return super().form_valid(form)

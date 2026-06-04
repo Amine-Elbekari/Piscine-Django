@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Publications{% endblock %}
+
+{% block content %}
+<section class="card app-card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+            <h2 class="h4 mb-0">Publications</h2>
+            <a class="btn btn-info btn-sm text-white" href="{% url 'publish' %}">Publish</a>
+        </div>
+
+        {% if articles %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Created</th>
+                            <th>Synopsis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles|dictsortreversed:"created" %}
+                            {% if request.user == article.author %}
+                                <tr>
+                                    <td class="fw-semibold"><a class="text-decoration-none" href="{% url 'details' article.pk %}">{{ article.title }}</a></td>
+                                    <td>{{ article.created|date:"M. d, Y, P" }}</td>
+                                    <td class="text-secondary">{{ article.synopsis|truncatechars:90 }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-light border mb-0">No publications provided yet by this user</div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

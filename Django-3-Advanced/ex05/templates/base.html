@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+{% load static %}
+{% load django_bootstrap5 %}
+<html lang='en'>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Articles{% endblock %}</title>
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        <link rel="stylesheet" href="{% static 'articles.css' %}">
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body class="site-body">
+        <div class="page-shell container-fluid px-3 px-md-4 py-3 py-md-4">
+            <header class="hero-header d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
+                <div>
+                    <h1 class="hero-title mb-0">Articles</h1>
+                    <p class="hero-subtitle mb-0">Share your writings</p>
+                </div>
+            </header>
+
+            <nav class="navbar navbar-expand-lg navbar-dark site-navbar rounded-3 shadow-sm mb-4 px-3">
+                <a class="navbar-brand brand-mark me-3" href="{% url 'home' %}" aria-label="Home"></a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
+                        <li class="nav-item">
+                            <a class="nav-link{% if request.resolver_match.url_name == 'home' %} active{% endif %}" href="{% url 'home' %}">Articles</a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link{% if request.resolver_match.url_name == 'favoritearticles' %} active{% endif %}" href="{% url 'favoritearticles' %}">Favourites</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link{% if request.resolver_match.url_name == 'publications' %} active{% endif %}" href="{% url 'publications' %}">Publications</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link{% if request.resolver_match.url_name == 'register' %} active{% endif %}" href="{% url 'register' %}">Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    {% if request.user.is_authenticated %}
+                        <div class="d-flex align-items-center gap-3 ms-lg-auto auth-strip text-light">
+                            <span class="small text-white-50">Logged as</span>
+                            <span class="fw-semibold">{{ request.user }}</span>
+                            <form method="post" action="{% url 'logout' %}" class="mb-0">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        {% with auth_form=login_form %}
+                            {% if request.resolver_match.url_name == 'login' and form %}
+                                {% with auth_form=form %}
+                                    <form method="post" action="{% url 'login' %}" class="login-strip d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 ms-lg-auto mb-2 mb-lg-0">
+                                        {% csrf_token %}
+                                        <div class="login-field">{{ auth_form.username }}</div>
+                                        <div class="login-field">{{ auth_form.password }}</div>
+                                        <button type="submit" class="btn btn-light btn-sm px-3">Login</button>
+                                    </form>
+                                    {% if auth_form.non_field_errors %}
+                                        <div class="text-warning small mt-2 ms-lg-auto">{{ auth_form.non_field_errors }}</div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                                <form method="post" action="{% url 'login' %}" class="login-strip d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 ms-lg-auto mb-2 mb-lg-0">
+                                    {% csrf_token %}
+                                    <div class="login-field">{{ auth_form.username }}</div>
+                                    <div class="login-field">{{ auth_form.password }}</div>
+                                    <button type="submit" class="btn btn-light btn-sm px-3">Login</button>
+                                </form>
+                            {% endif %}
+                        {% endwith %}
+                    {% endif %}
+                </div>
+            </nav>
+
+            {% if messages %}
+                <div class="mb-4">
+                    {% bootstrap_messages %}
+                </div>
+            {% endif %}
+
+            <main class="content-area">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang='en'>
+    <head>
+        {% block title %}
+        {% endblock  %}
+        {% comment %} {% block style %}
+        {% endblock %} {% endcomment %}
+        {% comment %} <link rel="stylesheet" href="{% static 'style_table.css' %}"> {% endcomment %}
+    </head>
+    <body>
+        
+        {% if request.user.is_authenticated %}
+            <nav >
+                <a href="{% url 'favoritearticles' %}">Favourites</a>
+                <a href="{% url 'publications' %}">Publications</a>
+                <a>Logged as <b>{{ request.user }}</b> </a>
+            </nav>    
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Log Out</button>
+            </form>
+                    
+        {% else %}
+                    <nav>
+                        <a href="{% url 'root' %}">Home</a>
+                        <a href="{% url 'home' %}">Last Articles</a>
+                        <a href="{% url 'register' %}">Sign-Up</a>
+                    </nav>
+                    <h2>Login</h2>
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        {{ login_form.as_p }}
+                        <button type="submit">Login</button>
+                    </form>
+                    
+        {% endif %}
+        
+        <div class="content">
+            {% block content %}
+                
+            {% endblock %}
+        </div>
+    </body>
+</html>

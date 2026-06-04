@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Publish{% endblock %}
+
+{% block content %}
+<section class="card app-card border-0 shadow-sm">
+    <div class="card-body">
+        <h2 class="h4 mb-3">You can publish an article here</h2>
+        <form method="post" class="article-form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-info text-white">Publish</button>
+        </form>
+    </div>
+</section>
+{% endblock  %}

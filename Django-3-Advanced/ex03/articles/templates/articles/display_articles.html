@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Articles</h2>
+
+    {% if articles %}
+        
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Created</th>
+                    <th>Synopsis</th>
+                    <th>Time Published</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles|dictsortreversed:"created" %}
+                <tr>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.author }}</td>
+                    <td>{{ article.created }}</td>
+                    <td>{{ article.synopsis|truncatechars:20 }}</td>
+                    <td>{{ article.created|timesince }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No articles provided yet</h2>
+    {% endif %}
+{% endblock %}

@@ -3,3 +3,4 @@ psycopg2
 django-environ
 django-extensions
 pytest
+django_bootstrap5

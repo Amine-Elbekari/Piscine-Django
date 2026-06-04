@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Articles{% endblock %}
+
+{% block content %}
+<section class="card app-card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+            <h2 class="h4 mb-0">Latest Articles</h2>
+        </div>
+
+        {% if articles %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Synopsis</th>
+                            <th>Writer</th>
+                            <th>Created</th>
+                            <th>When</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles|dictsortreversed:"created" %}
+                            <tr>
+                                <td class="fw-semibold">{{ article.title }}</td>
+                                <td class="text-secondary">{{ article.synopsis|truncatechars:90 }}</td>
+                                <td>{{ article.author }}</td>
+                                <td>{{ article.created|date:"M. d, Y, P" }}</td>
+                                <td>{{ article.created|timesince }} ago</td>
+                                <td class="text-end">
+                                    <a class="btn btn-info btn-sm text-white" href="{% url 'details' article.pk %}">Read</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-light border mb-0">No articles provided yet</div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Sign Up{% endblock%}
+
+{% block content %}
+<section class="card app-card border-0 shadow-sm mx-auto auth-card">
+    <div class="card-body">
+        <h2 class="h4 mb-3">Sign up</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-info text-white">Sign Up</button>
+        </form>
+    </div>
+</section>
+{% endblock  %}
