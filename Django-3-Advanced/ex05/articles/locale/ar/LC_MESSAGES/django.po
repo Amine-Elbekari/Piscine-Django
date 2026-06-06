@@ -1,0 +1,138 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-05 14:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+#: articles/templates/articles/details.html:13
+msgid "By"
+msgstr "بقلم"
+
+#: articles/templates/articles/details.html:13
+msgid "on"
+msgstr "في"
+
+#: articles/templates/articles/details.html:18
+msgid "Add to favourite"
+msgstr "أضف إلى المفضلة"
+
+#: articles/templates/articles/details.html:25
+#: articles/templates/articles/display_articles.html:19
+#: articles/templates/articles/display_publications.html:21
+msgid "Synopsis"
+msgstr "الملخص"
+
+#: articles/templates/articles/details.html:31
+msgid "Content"
+msgstr "المحتوى"
+
+#: articles/templates/articles/details.html:37
+#: articles/templates/articles/display_articles.html:42
+msgid "No articles provided yet"
+msgstr "لا توجد مقالات بعد"
+
+#: articles/templates/articles/display_articles.html:10
+msgid "Latest Articles"
+msgstr "أحدث المقالات"
+
+#: articles/templates/articles/display_articles.html:18
+#: articles/templates/articles/display_publications.html:19
+msgid "Title"
+msgstr "العنوان"
+
+#: articles/templates/articles/display_articles.html:20
+msgid "Writer"
+msgstr "الكاتب"
+
+#: articles/templates/articles/display_articles.html:21
+#: articles/templates/articles/display_publications.html:20
+msgid "Created"
+msgstr "تاريخ الإنشاء"
+
+#: articles/templates/articles/display_articles.html:22
+msgid "When"
+msgstr "متى"
+
+#: articles/templates/articles/display_articles.html:32
+msgid "ago"
+msgstr "منذ"
+
+#: articles/templates/articles/display_articles.html:34
+msgid "Read"
+msgstr "قراءة"
+
+#: articles/templates/articles/display_publications.html:10
+#: templates/base.html:41
+msgid "Publications"
+msgstr "المنشورات"
+
+#: articles/templates/articles/display_publications.html:11
+#: articles/templates/articles/publish.html:13
+msgid "Publish"
+msgstr "نشر"
+
+#: articles/templates/articles/display_publications.html:38
+msgid "No publications provided yet by this user"
+msgstr "لا توجد منشورات من هذا المستخدم بعد"
+
+#: articles/templates/articles/favorite_articles.html:9
+msgid "Favourite Articles"
+msgstr "المقالات المفضلة"
+
+#: articles/templates/articles/favorite_articles.html:16
+msgid "Open"
+msgstr "فتح"
+
+#: articles/templates/articles/favorite_articles.html:21
+msgid "No favourite articles yet"
+msgstr "لا توجد مقالات مفضلة بعد"
+
+#: articles/templates/articles/publish.html:9
+msgid "You can publish an article here"
+msgstr "يمكنك نشر مقال هنا"
+
+#: templates/base.html:19 templates/base.html:34
+msgid "Articles"
+msgstr "مقالات"
+
+#: templates/base.html:20
+msgid "Share your writings"
+msgstr "شارك كتاباتك"
+
+#: templates/base.html:38
+msgid "Favourites"
+msgstr "المفضلة"
+
+#: templates/base.html:45
+msgid "Register"
+msgstr "تسجيل"
+
+#: templates/base.html:52
+msgid "Logged as"
+msgstr "مسجل باسم"
+
+#: templates/base.html:56
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+#: templates/base.html:67 templates/base.html:78
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+#: templates/registration/signup.html:9 templates/registration/signup.html:13
+msgid "Sign up"
+msgstr "إنشاء حساب"
