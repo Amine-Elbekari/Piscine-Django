@@ -1,34 +1,51 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from django.test import TestCase
-from .models import Article, UserFavouriteArticle
+from django.urls import reverse
+from urllib.parse import urlencode
 
+from .models import Article, UserFavouriteArticle
+from .views import ListFavoriteArticles
 
 # Create your tests here.
 
-class favourites_articles_accesebility_by_registred_users(TestCase):
+class test_favourites_articles_accesebility(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create_user(username='AbdElMajid', password="Pass@123")
-        self.user2 = User.objects.create_user(username='Zoubida', password='Pass@123')
-        self.user3 = User.objects.create_user(username='Anass', password='Pass@123')
+        self.user = User.objects.create_user(username='Porsche', password='Pass@123')
+        self.article = Article.objects.create(
+            title='Tomobilat',
+            author = self.user,
+            synopsis = 'Zan van',
+            content = 'Smayka sma3 sma3 vaaaaaaaaaaaaaaaaaaan!',
+        )
         
-        self.article1 = Article.objects.create(
-            title='Taalime',
-            author = self.user1,
-            created = '2026-05-15T10:30:00Z',
-            synopsis = 'Tikchbila tiwliwla',
-            content = 'Taalim chi haja mzyana khassna n9raw o n7tarmo l2ostad',
+    def test_unauthenticated_user(self):
+        response = self.client.get(reverse('favoritearticles'))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'articles/favorite_articles.html')
+    def test_authenticated_user(self):
+
+        self.client.login(username='Porsche', password='Pass@123')
+        response = self.client.get(reverse('favoritearticles'))
+        self.assertEqual(response.status, 200)
+        self.assertTemplateUsed(response, 'articles/favorite_articles.html')
+
+class test_add_article_twice_to_favorite_list(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='Porsche', password='Pass@123')
+        self.article = Article.objects.create(
+            title='Tomobilat',
+            author = self.user,
+            synopsis = 'Zan van',
+            content = 'Smayka sma3 sma3 vaaaaaaaaaaaaaaaaaaan!',
         )
-        self.article2 = Article.objects.create(
-            title='Legend of Cooking',
-            author = self.user2,
-            created = '2026-05-12T10:30:00Z',
-            synopsis = 'Cooking is something doing with love',
-            content = 'Cooking is a pation not just a completion of ingeredients together',
-        )
-        self.article3 = Article.objects.create(
-            title="L'informatique",
-            author = self.user3,
-            created = '2026-05-14T10:30:00Z',
-            synopsis = 'Kifach tweli nadi f lma3lomiate',
-            content = 'awalan khassk tfhem , t9der thefd walkin dghia ghadi tnssa , dakshi lash ila fhmti rah ghadi thfed mzyaaan',
-        )
+
+    def test_add_to_favorite_list_for_authenticated_users(self):
+        
+        self.client.login(username='Porsche', password='Pass@123')     
+        response = self.client.post(reverse('addtofavorite', kwargs={'pk': self.article.pk}), {})    
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(UserFavouriteArticle.objects.filter(article=self.article).exists())
+
+    def test_add_to_favorite_list_for_unauthenticated_users(self):
+        pass
