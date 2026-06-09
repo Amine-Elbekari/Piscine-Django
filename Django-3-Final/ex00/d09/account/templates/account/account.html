@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+    {# hide home-box by default because jQuery will show it if user is logged in#}
+    <div id="login-box">
+        <h3>Login</h3>
+        <div id="error-box" style="color:red; display:none;"></div> {# use error div instead of alert #}
+        <form  id='loginform' action="{% url 'account_view' %}" method='post'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="action" value="login">
+            <button type="submit">Login</button>
+        </form>
+    <div>
+    <div id="home-box" style="display:none;"> {#hidden by default#}
+        <h3> Logged as <span id="user-username"></span></h3>
+        <button id="logout-btn">Logout</button>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
+    <script>
+        
+        {# the ready function tells the browser to wait until the HTML is fully loaded before running #}
+        $(document).ready(function () {
+            let userIsLoggedIn = {{ user.is_authenticated|yesno:"true,false" }};
+            if (userIsLoggedIn) {
+                $('#login-box').hide();
+                $('#home-box').show();
+                $('#user-username').text("{{ user.username }}");
+            }
+            else {
+                $('#login-box').show();
+                $('#home-box').hide();
+            }
+
+            $('#loginform').submit(function (e) {
+                
+                e.preventDefault(); 
+           
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        if (response.success) {
+                            $('$error-box').hide().empty() // Remove previous errors 
+                            $('#user-username').text(response.username)
+                            $('#login-box').hide();
+                            $('#home-box').show();
+                            $('#login-form')[0].reset();
+                        }
+                    },
+                    error: function (xhr) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorHtml = ''
+                        $.each(errors, function(field, messages) {
+                            $.each(messages, function(i, msg) {
+                                errorHtml += '<p>' + msg.message + '</p>'
+                            });
+                        });
+                        $('#error-box').html(errorHtml).show();
+                    } 
+                    
+                });
+            });
+        });
+        $('#logout-btn').click(function (e) {
+            e.preventDefault();
+
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'account_view' %}",
+                data: {
+                    action: 'logout',
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                }
+                success: function(response) {
+                    if(response.success) {
+                        $('#home-box').hide();
+                        $('#login-box').show();
+                        $('#user-username').text(''); // clear the username
+                    }
+                },
+                error: function(xhr){
+                    console.log('Logout failed: ', xhr.responseJSON);
+                }
+            })
+        })
+    </script>
+{% endblock  %}
