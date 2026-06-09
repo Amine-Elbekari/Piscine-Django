@@ -1,6 +1,7 @@
 #!/bin/bash
+set -e
 
-VENV_NAME='django_advanced'
+VENV_NAME='django_final'
 
 if [ ! -d "$VENV_NAME" ]; then
     python -m venv "$VENV_NAME"
@@ -13,11 +14,16 @@ fi
 
 source "$ACTIVATE_FILE"
 
-if [[ -z $(pip freeze) ]]; then
-    if [ -f "requirements.txt" ]; then 
-        pip install -r requirements.txt
-    fi
-else
-    echo "Dependencies already installed."
-fi
+pip install django
+pip install psycopg2
+pip install django-environ
+pip install django-extensions
+pip install pytest
+pip install djangorestframework
+pip install markdown
+pip install django-filter
+pip install pillow
+
+pip freeze > requirements.txt
+
 exec bash --rcfile <(echo ". ~/.bashrc; . $ACTIVATE_FILE")
