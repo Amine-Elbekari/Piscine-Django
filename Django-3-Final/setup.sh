@@ -19,7 +19,6 @@ pip install psycopg2
 pip install django-environ
 pip install django-extensions
 pip install pytest
-pip install djangorestframework
 pip install markdown
 pip install django-filter
 pip install pillow
