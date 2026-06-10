@@ -10,7 +10,7 @@
             <input type="hidden" name="action" value="login">
             <button type="submit">Login</button>
         </form>
-    <div>
+    </div>
     <div id="home-box" style="display:none;"> {#hidden by default#}
         <h3> Logged as <span id="user-username"></span></h3>
         <button id="logout-btn">Logout</button>
@@ -44,11 +44,11 @@
 
                     success: function (response) {
                         if (response.success) {
-                            $('$error-box').hide().empty() // Remove previous errors 
+                            $('#error-box').hide().empty() // Remove previous errors 
                             $('#user-username').text(response.username)
                             $('#login-box').hide();
                             $('#home-box').show();
-                            $('#login-form')[0].reset();
+                            $('#loginform')[0].reset();
                         }
                     },
                     error: function (xhr) {
@@ -65,28 +65,39 @@
                 });
             });
         });
-        $('#logout-btn').click(function (e) {
-            e.preventDefault();
+            $('#logout-btn').click(function (e) {
+                e.preventDefault();
 
-
-            $.ajax({
-                type: "POST",
-                url: "{% url 'account_view' %}",
-                data: {
-                    action: 'logout',
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                }
-                success: function(response) {
-                    if(response.success) {
-                        $('#home-box').hide();
-                        $('#login-box').show();
-                        $('#user-username').text(''); // clear the username
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        document.cookie.split(';').forEach(function(cookie) {
+                            cookie = cookie.trim();
+                            if (cookie.startsWith(name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.split('=')[1]);
+                            }
+                        });
                     }
-                },
-                error: function(xhr){
-                    console.log('Logout failed: ', xhr.responseJSON);
+                    return cookieValue;
                 }
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'account_view' %}",
+                    data: {
+                        action: 'logout',
+                        csrfmiddlewaretoken: getCookie('csrftoken')
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            $('#home-box').hide();
+                            $('#login-box').show();
+                            $('#user-username').text(''); // clear the username
+                        }
+                    },
+                    error: function(xhr){
+                        console.log('Logout failed: ', xhr.responseJSON);
+                    }
+                })
             })
-        })
     </script>
 {% endblock  %}

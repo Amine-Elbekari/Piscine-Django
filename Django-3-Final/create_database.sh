@@ -4,11 +4,14 @@ set -a
 . ./.env
 set +a
 
+ENGINE=$(printf '%s' "$ENGINE" | tr -d '\r')
 NAME=$(printf '%s' "$NAME" | tr -d '\r')
 USER=$(printf '%s' "$USER" | tr -d '\r')
 PASSWORD=$(printf '%s' "$PASSWORD" | tr -d '\r')
 HOST=$(printf '%s' "$HOST" | tr -d '\r')
 PORT=$(printf '%s' "$PORT" | tr -d '\r')
+
+PASSWORD=$(printf '%s' "$PASSWORD" | sed "s/'/''/g")
 
 PSQL=""
 
@@ -37,19 +40,28 @@ if [ -z "$PSQL" ]; then
 	exit 1
 fi
 
-"$PSQL" -h "${HOST:-localhost}" -p "${PORT:-5432}" -U postgres -d postgres -v dbname="$NAME" -v dbuser="$USER" -v dbpass="$PASSWORD" <<'EOF'
--- Kick out other sessions
-SELECT pg_terminate_backend(pid) 
-FROM pg_stat_activity 
-WHERE datname = :'dbname' AND pid <> pg_backend_pid();
+"$PSQL" -h "${HOST:-localhost}" -p "${PORT:-5432}" -U postgres -d postgres -v dbname="$NAME" -v dbuser="$USER" <<PSQL_EOF
+-- Kick out sessions for the requested database
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE datname = :'dbname'
+	AND pid <> pg_backend_pid();
 
--- Reset everything safely
+-- Drop any previous copy of the requested database
 DROP DATABASE IF EXISTS :"dbname";
-DROP USER IF EXISTS :"dbuser";
 
--- Recreate database and user
+-- Recreate the requested database and keep the user
+DO \$\$
+BEGIN
+	IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '${USER}') THEN
+		EXECUTE 'ALTER USER ' || quote_ident('${USER}') || ' WITH ENCRYPTED PASSWORD ' || quote_literal('${PASSWORD}');
+	ELSE
+		EXECUTE 'CREATE USER ' || quote_ident('${USER}') || ' WITH ENCRYPTED PASSWORD ' || quote_literal('${PASSWORD}');
+	END IF;
+END
+\$\$;
+
 CREATE DATABASE :"dbname";
-CREATE USER :"dbuser" WITH ENCRYPTED PASSWORD :'dbpass';
 GRANT ALL PRIVILEGES ON DATABASE :"dbname" TO :"dbuser";
 
 -- Connect directly to the new database to fix schema permissions
@@ -58,4 +70,4 @@ GRANT ALL PRIVILEGES ON DATABASE :"dbname" TO :"dbuser";
 -- CRITICAL FIX FOR POSTGRESQL 15+:
 GRANT ALL ON SCHEMA public TO :"dbuser";
 ALTER SCHEMA public OWNER TO :"dbuser";
-EOF
+PSQL_EOF

@@ -1,0 +1,10 @@
+[ 
+	{
+		"model": "auth.user",
+		"pk": 1,
+		"fields": {
+			"username": "Anass",
+			"password": "pbkdf2_sha256$1200000$uiWsNAnB5ClE8KP4Cb1H90$2xMf/o7VJTLQwLb/nJKZm4u5AcmoYD7kfqJaow0ij6Q="
+		}
+	}
+]
