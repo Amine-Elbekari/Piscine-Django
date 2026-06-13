@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Choose a chatroom</h2>
+        {% for room in rooms %}
+            <a href="{% url 'chat_room' room.name %}">{{ room.name }}</a>
+        {% endfor %}
+{% endblock  %}
