@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Chat Room</title>
+{% endblock  %}
+
+{% block content %}
+    <div style="display: flex;">
+        <div id="chat-container">
+            <div id="chat-log" style="
+                height: 400px;          
+                overflow-y: scroll;     
+                border: 1px solid #ccc; 
+                padding: 10px;  
+            ">
+            </div>
+            <input id="chat-message-input" type="text" size="100"><br>
+            <input id="chat-message-submit" type="button" value="Send">
+        </div>
+
+        <div id="user-list-container">
+            <h4>Online Users</h4>
+            <ul id="online-users"></ul>
+        </div>
+    </div>
+    {{ room.name|json_script:"room-name" }}
+{% endblock  %}
+{% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
+    <script>
+        $(document).ready(function() {
+        
+        
+            const roomName = JSON.parse(document.getElementById('room-name').textContent);
+            const chatSocket = new WebSocket(
+                'ws://'
+                + window.location.host
+                + '/ws/chat/'
+                + roomName
+                + '/'
+                );
+                
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                if (data.type === 'user_list') {
+                    $('#online-users').empty();
+                    data.users.forEach(function(user){
+                        $('#online-users').append('<li>' + user + '</li>');
+                    });
+                }
+                else {
+
+                    if (data.user !== '')
+                        $('#chat-log').append('<p>' + data.user + ': ' + data.content + '</p>');
+                    else
+                        $('#chat-log').append('<p>' + data.content + '</p>');
+                    $('#chat-log').scrollTop($('#chat-log')[0].scrollHeight);
+
+                }
+            };
+            
+            chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+            };
+        
+            $('#chat-message-input').focus();
+        
+            $('#chat-message-input').on('keyup', function(e) {
+                if (e.key == 'Enter') {
+                    $('#chat-message-submit').click();
+                }
+            });
+        
+            $('#chat-message-submit').on('click', function(e) {
+                const $messageInputDom = $('#chat-message-input');
+                const content = $messageInputDom.val()
+                if (content.trim() === '') return ;
+                chatSocket.send(JSON.stringify({
+                    'content': content
+                }));
+                $messageInputDom.val('');
+                $messageInputDom.focus();
+            })
+        })
+    </script>
+{% endblock  %}
